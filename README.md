@@ -3,7 +3,7 @@ Digital Logic Course - Designing & Implementing a Processor
 -------------------------------------------------------------------
 This repo is built for design and implement a processor which supports instruction set: (AND, OR, ADD, LD, ST, ANDI, ORI, ADDI, XOR, XORI, JUMP, BEQ, BGT, BLT, BGE, BLE).
 
-   •Processor will have 18 bits address width and 18 bits data width. Processor will have 5 parts as follows. Register File will hold register values and signal to write 
+  • Processor will have 18 bits address width and 18 bits data width. Processor will have 5 parts as follows. Register File will hold register values and signal to write 
 into any register. There will be 16 registers in processor. 
 
  • Instruction Memory will be a read-only memory and instructions will be stored in this component. If the current instruction is not one of the J,BR; 
