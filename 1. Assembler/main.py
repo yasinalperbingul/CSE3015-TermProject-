@@ -68,7 +68,9 @@ def read_file(input_file_name: str):
     return instructions
 
 def write_file(output_list: typing.List):
-    with open('hex_output.hex', 'w') as filehandle:
+    with open('instruction_memory.txt', 'w') as filehandle:
+        filehandle.write('v2.0 raw\n')
+        filehandle.write('00000\n')
         for hex in output_list:
             filehandle.write('%s\n' % hex)
 
@@ -86,10 +88,10 @@ if __name__ == '__main__':
         "XORI": "1001",
         "JUMP": "1010",
         "BEQ": "1011",
-        "BGT": "1100",
-        "BLT": "1101",
-        "BGE": "1110",
-        "BLE": "1111"
+        "BGT": "1011",
+        "BLT": "1011",
+        "BGE": "1011",
+        "BLE": "1011"
     }
     register_dict = {
         "R0": "0000",
@@ -110,6 +112,13 @@ if __name__ == '__main__':
         "R15": "1111"
     }
 
+    nzp_dict = {
+        "BEQ": "010",
+        "BLT": "001",
+        "BGT": "100",
+        "BLE": "011",
+        "BGE": "110"
+    }
     output_binary_result = []
 
     instructions: typing.List = read_file("input.txt")
@@ -126,7 +135,7 @@ if __name__ == '__main__':
 
         opcode = opcode_dict[operation]
         binary_value += opcode
-        if operation in ["ADD", "AND", "OR", "XOR"]:
+        if operation in ["AND", "OR","ADD", "XOR"]:
             dest = splitted_right_side[0]
             src1 = splitted_right_side[1]
             src2 = splitted_right_side[2]
@@ -152,14 +161,20 @@ if __name__ == '__main__':
 
 
         elif operation in ["BEQ", "BGT", "BLT", "BGE", "BLE"]:
+
             op1 = splitted_right_side[0]
             op2 = splitted_right_side[1]
             addr = int(splitted_right_side[2])
+            nzp = nzp_dict[operation]
+
 
             registers: typing.List = registers_to_binary(op1, op2)
-            address = addr_to_binary(addr, 6)
+            address = addr_to_binary(addr, 3)
 
-            binary_value += f"{registers[0]}{registers[1]}{address}"
+            msb_addr = address[0]
+            addr_without_msb = address[1:]
+            binary_value += f"{msb_addr}{nzp}{registers[0]}{addr_without_msb}{registers[1]}"
+
 
 
         elif operation == "LD":
